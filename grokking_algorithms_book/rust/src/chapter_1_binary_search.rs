@@ -1,5 +1,3 @@
-#![warn(clippy::pedantic)]
-
 pub fn main() {
     println!("======== Binary Search! ========");
 
