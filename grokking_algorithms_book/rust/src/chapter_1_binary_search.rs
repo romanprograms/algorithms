@@ -3,8 +3,7 @@ pub fn main() {
 
     let array = vec![3, 8, 23, 48, 98, 100];
     let target = 98;
-    // TODO: learn how borrowing works, so you don't have to clone every time
-    let res = binary_search(array.clone(), target);
+    let res = binary_search(&array, target);
 
     println!(
         "searching array {:?} for value {} took {} steps, the found value is at index {}",
@@ -12,7 +11,7 @@ pub fn main() {
     );
 }
 
-fn binary_search(array: Vec<i32>, target: i32) -> (i32, i32) {
+fn binary_search(array: &Vec<i32>, target: i32) -> (i32, i32) {
     let mut low: usize = 0;
     let mut high: usize = array.len() - 1;
     let mut steps = 0;
