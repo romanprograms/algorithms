@@ -1,0 +1,1 @@
+int TwoNumberSum(int array, int targetSum);

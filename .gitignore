@@ -1,2 +1,43 @@
-.DS_STORE
 target
+
+# Build directories
+build/
+build-*/
+out/
+cmake-build-*/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+*.app
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Clangd cache
+.cache/
+.clangd/
+compile_commands.json
+
+# Debug files
+*.dSYM/
+*.pdb
+
+# Dependency directories
+_deps/
