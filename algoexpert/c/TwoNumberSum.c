@@ -10,6 +10,10 @@
  * an empty array.
  *
  */
-int TwoNumberSum(int array, int targetSum)
-{
+void TwoNumberSum(int *array, size_t length, int targetSum) {
+  // TODO: create a look up table / hashmap/ dictionary data structure
+
+  for (size_t i = 0; i < length; i++) {
+    printf("%d\n", array[i]);
+  }
 }

@@ -1,1 +1,2 @@
-int TwoNumberSum(int array, int targetSum);
+#include <stddef.h>
+void TwoNumberSum(int *array, size_t length, int targetSum);
