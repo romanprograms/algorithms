@@ -13,3 +13,7 @@ cargon run
 cd cpp
 g++ -std=c++17 src/main.cpp src/chapter_1_binary_search.cpp src/chapter_2_selection_sort.cpp -o target/binary_search && target/binary_search
 ```
+
+# Data structures
+This section is for learning purposes. Those data structure may or may not be suitable for real world usage.
+
