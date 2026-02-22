@@ -18,7 +18,6 @@ void printArray(int *array, size_t length)
 typedef struct SeenNumberHashItem
 {
   int key;
-  bool value;
   UT_hash_handle hh;
 } SeenNumberHashItem;
 
@@ -32,12 +31,9 @@ void add_num(SeenNumberHashItem **table, int key)
   {
     new_item = malloc(sizeof(SeenNumberHashItem));
     new_item->key = key;
-    new_item->value = true;
     HASH_ADD_INT(*table, key, new_item);
   }
 }
-
-int *answer;
 
 /*
  * Two Number Sum
@@ -49,7 +45,7 @@ int *answer;
  * an empty array.
  *
  */
-void get_two_number_sum(int *array, size_t length, int targetSum)
+int *get_two_number_sum(int *array, size_t length, int targetSum)
 {
   struct SeenNumberHashItem *table = NULL;
 
@@ -62,14 +58,20 @@ void get_two_number_sum(int *array, size_t length, int targetSum)
     if (new_item)
     {
       int current_number = array[i];
-      answer = malloc(2 * sizeof(int));
+      int *answer = malloc(2 * sizeof(int));
+      if (!answer)
+      {
+        return NULL;
+      }
       answer[0] = current_number;
       answer[1] = target_number;
-      return;
+      return answer;
     }
 
     add_num(&table, array[i]);
   }
+
+  return NULL;
 }
 
 void two_number_sum()
@@ -79,7 +81,7 @@ void two_number_sum()
   size_t length = ARRAY_LEN(numArray);
 
   int targetSum = 10;
-  get_two_number_sum(numArray, length, targetSum);
+  int *answer = get_two_number_sum(numArray, length, targetSum);
 
   printf("Answer:\n");
 
