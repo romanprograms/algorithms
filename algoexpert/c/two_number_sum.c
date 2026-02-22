@@ -21,7 +21,7 @@ typedef struct SeenNumberHashItem
   UT_hash_handle hh;
 } SeenNumberHashItem;
 
-void add_num(SeenNumberHashItem **table, int key)
+bool add_num(SeenNumberHashItem **table, int key)
 {
   SeenNumberHashItem *new_item;
 
@@ -30,9 +30,15 @@ void add_num(SeenNumberHashItem **table, int key)
   if (!new_item)
   {
     new_item = malloc(sizeof(SeenNumberHashItem));
+    if (!new_item)
+    {
+      return false;
+    }
     new_item->key = key;
     HASH_ADD_INT(*table, key, new_item);
+    return true;
   }
+  return false;
 }
 
 /*
