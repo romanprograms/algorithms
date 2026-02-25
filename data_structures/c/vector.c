@@ -22,7 +22,8 @@ bool vector_new(Vector *v, size_t capacity) {
 
 bool vector_add(Vector *v, int element) {
   if (v->length == v->capacity) {
-    printf("Capacity reached. Making new allocation!\n");
+    printf("Trying to insert %d. Capacity reached. Making new allocation!\n",
+           element);
 
     size_t new_capacity = v->capacity * 2;
     // maybe use realloc ?
@@ -32,7 +33,7 @@ bool vector_add(Vector *v, int element) {
     }
     v->capacity = new_capacity;
     // copy existing array into new int* array
-    for (int i = 0; i < v->length; i++) {
+    for (size_t i = 0; i < v->length; i++) {
       new_array[i] = v->array[i];
     }
     // free the old array
@@ -49,9 +50,15 @@ bool vector_add(Vector *v, int element) {
 }
 
 void vector_print(Vector *v) {
+  printf("[");
   for (size_t i = 0; i < v->length; i++) {
-    printf("%d, ", v->array[i]);
+    if (i == v->length - 1) {
+      printf("%d", v->array[i]);
+    } else {
+      printf("%d, ", v->array[i]);
+    }
   }
+  printf("]");
 }
 
 int main(void) {
