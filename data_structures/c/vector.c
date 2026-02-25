@@ -24,7 +24,7 @@ bool vector_add(Vector *v, int element) {
   if (v->length == v->capacity) {
     printf("Capacity reached. Making new allocation!\n");
 
-    int new_capacity = v->capacity * 2;
+    size_t new_capacity = v->capacity * 2;
     // maybe use realloc ?
     int *new_array = malloc(new_capacity * sizeof(int));
     if (!new_array) {
