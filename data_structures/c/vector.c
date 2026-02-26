@@ -4,6 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TRYV(vecptr, expr)                                                     \
+  do {                                                                         \
+    if (!(expr)) {                                                             \
+      vector_free((vecptr));                                                   \
+      return 1;                                                                \
+    }                                                                          \
+  } while (0)
+
 typedef struct Vector {
   size_t capacity;
   size_t length;
@@ -76,26 +84,11 @@ int main(void) {
   Vector v;
   vector_init(&v);
 
-  /* optional: reserve upfront */
-  if (!vector_reserve(&v, 3))
-    return 1;
-
-  if (!vector_push(&v, 10)) {
-    vector_free(&v);
-    return 1;
-  }
-  if (!vector_push(&v, 20)) {
-    vector_free(&v);
-    return 1;
-  }
-  if (!vector_push(&v, 30)) {
-    vector_free(&v);
-    return 1;
-  }
-  if (!vector_push(&v, 40)) {
-    vector_free(&v);
-    return 1;
-  }
+  TRYV(&v, vector_reserve(&v, 1));
+  TRYV(&v, vector_reserve(&v, 2));
+  TRYV(&v, vector_reserve(&v, 3));
+  TRYV(&v, vector_reserve(&v, 4));
+  TRYV(&v, vector_reserve(&v, 5));
 
   for (size_t i = 0; i < v.length; i++) {
     printf("%d ", v.data[i]);
