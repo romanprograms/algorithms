@@ -4,101 +4,102 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TRYV(vecptr, expr)                                                     \
-  do {                                                                         \
-    if (!(expr)) {                                                             \
-      vector_free(vecptr);                                                     \
-      return 1;                                                                \
-    }                                                                          \
-  } while (0)
-
 typedef struct Vector {
   size_t capacity;
   size_t length;
-  int *array;
-
+  int *data;
 } Vector;
 
-bool vector_new(Vector *v, size_t capacity) {
+/* Safe zero-init (makes vector_free always safe) */
+static inline void vector_init(Vector *v) {
+  if (!v)
+    return;
+  *v = (Vector){0};
+}
+
+/* Allocate an initial buffer (optional; you can also start with capacity=0) */
+static inline bool vector_reserve(Vector *v, size_t capacity) {
   if (!v)
     return false;
 
-  if (capacity == 0) {
-    v->capacity = 1;
-  } else {
-    v->capacity = capacity;
-  }
-  v->length = 0;
-  v->array = malloc(v->capacity * sizeof(*v->array));
-
-  if (!v->array) {
+  if (capacity == 0)
+    capacity = 1;
+  if (capacity > SIZE_MAX / sizeof *v->data)
     return false;
-  }
+
+  int *p = (int *)malloc(capacity * sizeof *v->data);
+  if (!p)
+    return false;
+
+  /* If v already had data, free it (simple behavior for now) */
+  free(v->data);
+  v->data = p;
+  v->capacity = capacity;
+  if (v->length > v->capacity)
+    v->length = v->capacity;
+
   return true;
 }
 
-bool vector_add(Vector *v, int element) {
+static inline void vector_free(Vector *v) {
+  if (!v)
+    return;
+  free(v->data);
+  *v = (Vector){0};
+}
+
+static inline bool vector_push(Vector *v, int value) {
   if (!v)
     return false;
 
+  /* Grow if full */
   if (v->length == v->capacity) {
-    printf("Trying to insert %d. Capacity reached. Making new allocation!\n",
-           element);
+    size_t new_capacity = (v->capacity == 0) ? 1 : (v->capacity * 2);
 
-    size_t new_capacity = v->capacity ? v->capacity * 2 : 1;
-    if (new_capacity > SIZE_MAX / sizeof *v->array)
+    /* Overflow guard for bytes = new_capacity * sizeof(int) */
+    if (new_capacity > SIZE_MAX / sizeof *v->data)
       return false;
 
-    int *tmp = realloc(v->array, new_capacity * sizeof *v->array);
+    int *tmp = (int *)realloc(v->data, new_capacity * sizeof *v->data);
     if (!tmp)
       return false;
 
-    v->array = tmp;
+    v->data = tmp;
     v->capacity = new_capacity;
   }
 
-  v->array[v->length] = element;
-  v->length++;
-
+  v->data[v->length++] = value;
   return true;
-}
-
-void vector_free(Vector *v) {
-  free(v->array);
-  v->array = NULL;
-  v->capacity = 0;
-  v->length = 0;
-}
-
-void vector_print(const Vector *v) {
-  printf("[");
-  for (size_t i = 0; i < v->length; i++) {
-    if (i == v->length - 1) {
-      printf("%d", v->array[i]);
-    } else {
-      printf("%d, ", v->array[i]);
-    }
-  }
-  printf("]");
 }
 
 int main(void) {
   Vector v;
-  bool res = vector_new(&v, 3);
+  vector_init(&v);
 
-  if (!res)
+  /* optional: reserve upfront */
+  if (!vector_reserve(&v, 3))
     return 1;
 
-  TRYV(&v, vector_add(&v, 1));
-  TRYV(&v, vector_add(&v, 2));
-  TRYV(&v, vector_add(&v, 3));
-  TRYV(&v, vector_add(&v, 4));
-  TRYV(&v, vector_add(&v, 5));
+  if (!vector_push(&v, 10)) {
+    vector_free(&v);
+    return 1;
+  }
+  if (!vector_push(&v, 20)) {
+    vector_free(&v);
+    return 1;
+  }
+  if (!vector_push(&v, 30)) {
+    vector_free(&v);
+    return 1;
+  }
+  if (!vector_push(&v, 40)) {
+    vector_free(&v);
+    return 1;
+  }
 
-  printf("Printing v ");
-
-  vector_print(&v);
-
+  for (size_t i = 0; i < v.length; i++) {
+    printf("%d ", v.data[i]);
+  }
   printf("\n");
 
   vector_free(&v);
