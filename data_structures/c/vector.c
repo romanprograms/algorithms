@@ -10,7 +10,11 @@ typedef struct Vector {
 } Vector;
 
 bool vector_new(Vector *v, size_t capacity) {
-  v->capacity = capacity;
+  if (capacity == 0) {
+    v->capacity = 1;
+  } else {
+    v->capacity = capacity;
+  }
   v->length = 0;
   v->array = malloc(capacity * sizeof(int));
 
@@ -26,11 +30,19 @@ bool vector_add(Vector *v, int element) {
            element);
 
     size_t new_capacity = v->capacity * 2;
+
+    // guard against overflowing size_t and allocating too small a buffer →
+    // buffer overflow later.
+    if (new_capacity > SIZE_MAX / sizeof *v->array)
+      return false;
+
     // maybe use realloc ?
     int *new_array = malloc(new_capacity * sizeof(int));
+
     if (!new_array) {
       return false;
     }
+
     v->capacity = new_capacity;
     // copy existing array into new int* array
     for (size_t i = 0; i < v->length; i++) {
@@ -41,12 +53,17 @@ bool vector_add(Vector *v, int element) {
     v->array = new_array;
   }
 
-  if (v->length < v->capacity) {
-    v->array[v->length] = element;
-    v->length++;
-  }
+  v->array[v->length] = element;
+  v->length++;
 
   return true;
+}
+
+void vector_free(Vector *v) {
+  free(v->array);
+  v->array = NULL;
+  v->capacity = 0;
+  v->length = 0;
 }
 
 void vector_print(Vector *v) {
@@ -79,5 +96,7 @@ int main(void) {
   vector_print(&v);
 
   printf("\n");
+
+  vector_free(&v);
   return 0;
 }
