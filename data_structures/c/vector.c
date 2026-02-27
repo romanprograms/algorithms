@@ -118,8 +118,6 @@ static inline bool vector_pop(Vector *v, int *out) {
   return true;
 }
 
-// static inline int vector_pop(Vector *v, size_t index) {}
-
 int main(void) {
   Vector v;
   vector_init(&v);
