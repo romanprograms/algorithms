@@ -80,20 +80,73 @@ static inline bool vector_push(Vector *v, int value) {
   return true;
 }
 
+static inline bool vector_get(const Vector *v, size_t index, int *out) {
+  if (!v || !out)
+    return false;
+  if (index >= v->length)
+    return false;
+
+  *out = v->data[index];
+  return true;
+}
+
+static inline bool vector_pop(Vector *v, int *out) {
+  if (!v || !out)
+    return false;
+  if (v->length == 0)
+    return false;
+
+  *out = v->data[v->length - 1];
+  v->length--;
+
+  if (v->capacity > 1 && v->length <= v->capacity / 4) {
+    size_t new_capacity = v->capacity / 2;
+    if (new_capacity == 0)
+      new_capacity = 1;
+    if (new_capacity < v->length)
+      new_capacity = v->length;
+
+    if (new_capacity <= SIZE_MAX / sizeof *v->data) {
+      int *tmp = realloc(v->data, new_capacity * sizeof *v->data);
+      if (tmp) {
+        v->data = tmp;
+        v->capacity = new_capacity;
+      }
+    }
+  }
+
+  return true;
+}
+
+// static inline int vector_pop(Vector *v, size_t index) {}
+
 int main(void) {
   Vector v;
   vector_init(&v);
 
-  TRYV(&v, vector_reserve(&v, 1));
-  TRYV(&v, vector_reserve(&v, 2));
   TRYV(&v, vector_reserve(&v, 3));
-  TRYV(&v, vector_reserve(&v, 4));
-  TRYV(&v, vector_reserve(&v, 5));
+
+  TRYV(&v, vector_push(&v, 1));
+  TRYV(&v, vector_push(&v, 2));
+  TRYV(&v, vector_push(&v, 3));
+  TRYV(&v, vector_push(&v, 4));
+  TRYV(&v, vector_push(&v, 5));
 
   for (size_t i = 0; i < v.length; i++) {
     printf("%d ", v.data[i]);
   }
   printf("\n");
+
+  int pop_res;
+  vector_pop(&v, &pop_res);
+  printf("Pop result %d\n", pop_res);
+
+  int x;
+  if (!vector_get(&v, 3, &x)) {
+    vector_free(&v);
+    return 1;
+  }
+  printf("%d\n", x); // prints 40
 
   vector_free(&v);
   return 0;
