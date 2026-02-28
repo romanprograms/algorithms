@@ -90,6 +90,18 @@ static inline bool vector_get(const Vector *v, size_t index, int *out) {
   return true;
 }
 
+static inline bool vector_includes(const Vector *v, int target) {
+  if (!v)
+    return false;
+
+  for (size_t i = 0; i < v->length; i++) {
+    if (v->data[i] == target)
+      return true;
+  }
+
+  return false;
+}
+
 static inline bool vector_pop(Vector *v, int *out) {
   if (!v || !out)
     return false;
@@ -138,6 +150,10 @@ int main(void) {
   int pop_res;
   vector_pop(&v, &pop_res);
   printf("Pop result %d\n", pop_res);
+
+  if (vector_includes(&v, 3)) {
+    printf("Includes 3\n");
+  }
 
   int x;
   if (!vector_get(&v, 3, &x)) {
