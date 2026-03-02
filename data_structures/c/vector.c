@@ -1,3 +1,4 @@
+#include "vector.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -12,51 +13,43 @@
     }                                                                          \
   } while (0)
 
-typedef struct Vector {
-  size_t capacity;
-  size_t length;
-  int *data;
-} Vector;
-
 /* Safe zero-init (makes vector_free always safe) */
-static inline void vector_init(Vector *v) {
+void vector_init(Vector *v) {
   if (!v)
     return;
   *v = (Vector){0};
 }
 
-/* Allocate an initial buffer (optional; you can also start with capacity=0) */
-static inline bool vector_reserve(Vector *v, size_t capacity) {
+/* Ensure the vector has at least the specified capacity */
+bool vector_reserve(Vector *v, size_t capacity) {
   if (!v)
     return false;
 
-  if (capacity == 0)
-    capacity = 1;
+  /* If current capacity is sufficient, do nothing */
+  if (capacity <= v->capacity)
+    return true;
+
   if (capacity > SIZE_MAX / sizeof *v->data)
     return false;
 
-  int *p = (int *)malloc(capacity * sizeof *v->data);
+  int *p = (int *)realloc(v->data, capacity * sizeof *v->data);
   if (!p)
     return false;
 
-  /* If v already had data, free it (simple behavior for now) */
-  free(v->data);
   v->data = p;
   v->capacity = capacity;
-  if (v->length > v->capacity)
-    v->length = v->capacity;
 
   return true;
 }
 
-static inline void vector_free(Vector *v) {
+void vector_free(Vector *v) {
   if (!v)
     return;
   free(v->data);
   *v = (Vector){0};
 }
 
-static inline bool vector_push(Vector *v, int value) {
+bool vector_push(Vector *v, int value) {
   if (!v)
     return false;
 
@@ -80,7 +73,7 @@ static inline bool vector_push(Vector *v, int value) {
   return true;
 }
 
-static inline bool vector_get(const Vector *v, size_t index, int *out) {
+bool vector_get(const Vector *v, size_t index, int *out) {
   if (!v || !out)
     return false;
   if (index >= v->length)
@@ -90,7 +83,7 @@ static inline bool vector_get(const Vector *v, size_t index, int *out) {
   return true;
 }
 
-static inline bool vector_includes(const Vector *v, int target) {
+bool vector_includes(const Vector *v, int target) {
   if (!v)
     return false;
 
@@ -102,7 +95,7 @@ static inline bool vector_includes(const Vector *v, int target) {
   return false;
 }
 
-static inline bool vector_pop(Vector *v, int *out) {
+bool vector_pop(Vector *v, int *out) {
   if (!v || !out)
     return false;
   if (v->length == 0)
