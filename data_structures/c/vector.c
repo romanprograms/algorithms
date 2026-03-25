@@ -153,7 +153,7 @@ int main(void) {
     vector_free(&v);
     return 1;
   }
-  printf("%d\n", x); // prints 40
+  printf("%d\n", x); // prints 4
 
   vector_free(&v);
   return 0;
