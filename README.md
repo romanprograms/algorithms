@@ -25,3 +25,14 @@ This section is for learning purposes. Those data structure may or may not be su
 mdkir build
 gcc -o [SOURCE_FILE] build/[OUTPUT_FILE] && ./buld/[OUTPUT_FILE] 
 ```
+
+```sh
+gcc -Wall -Wextra -o vector/main vector/main.c && ./vector/main
+```
+
+## Compiler Flags
+
+- `-Wall` — enables most common warnings (unused variables, missing returns, etc.)
+- `-Wextra` — enables additional warnings that `-Wall` doesn't cover (unused parameters, sign comparison, etc.)
+- `-o vector/main` — sets the output file name
+- `-Werror` — (optional) treats warnings as errors, forces you to fix them before the code compiles
