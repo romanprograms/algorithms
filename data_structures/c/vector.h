@@ -6,9 +6,10 @@
 
 /* Public API */
 
-typedef struct Vector {
+typedef struct Vector
+{
   size_t capacity;
-  size_t length;
+  size_t size;
   int *data;
 } Vector;
 
@@ -20,11 +21,8 @@ void vector_free(Vector *v);
 bool vector_reserve(Vector *v, size_t capacity);
 
 /* Modifiers */
-bool vector_push(Vector *v, int value);
-bool vector_pop(Vector *v, int *out);
+bool vector_push_back(Vector *v, int value);
 
 /* Access */
-bool vector_get(const Vector *v, size_t index, int *out);
-bool vector_includes(const Vector *v, int target);
 
 #endif /* VECTOR_H */
