@@ -8,8 +8,8 @@
 
 typedef struct Vector
 {
-  size_t capacity;
   size_t size;
+  size_t capacity;
   int *data;
 } Vector;
 
@@ -21,7 +21,7 @@ void vector_free(Vector *v);
 bool vector_reserve(Vector *v, size_t capacity);
 
 /* Modifiers */
-bool vector_push_back(Vector *v, int value);
+bool vector_push_back(Vector *v, int new_element);
 
 /* Access */
 

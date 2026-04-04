@@ -23,11 +23,12 @@ This section is for learning purposes. Those data structure may or may not be su
 
 ```sh
 mdkir build
-gcc -o [SOURCE_FILE] build/[OUTPUT_FILE] && ./buld/[OUTPUT_FILE] 
+gcc  [SOURCE_FILE] -o build/[OUTPUT_FILE] && ./buld/[OUTPUT_FILE] 
 ```
 
 ```sh
-gcc -Wall -Wextra -o vector/main vector/main.c && ./vector/main
+# the position of -o flag matters
+gcc -Wall -Wextra  data_structures/c/main.c data_structures/c/vector.c -o build/main && ./build/main
 ```
 
 ## Compiler Flags

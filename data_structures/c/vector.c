@@ -9,13 +9,6 @@
 #include <stdint.h>
 #include <assert.h>
 
-typedef struct Vector
-{
-  size_t size;
-  size_t capacity;
-  int *data;
-} Vector;
-
 void vector_init(Vector *v)
 {
   assert(v != NULL);
