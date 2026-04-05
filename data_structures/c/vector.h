@@ -22,7 +22,9 @@ bool vector_reserve(Vector *v, size_t capacity);
 
 /* Modifiers */
 bool vector_push_back(Vector *v, int new_element);
+bool vector_pop(Vector *v, int *out);
 
 /* Access */
+bool vector_get(Vector *v, size_t index, int *out);
 
 #endif /* VECTOR_H */
