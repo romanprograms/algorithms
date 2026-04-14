@@ -1,5 +1,9 @@
 package org.example;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 public class TwoNumberSum {
     private int[] array;
     private int targetSum;
@@ -22,8 +26,22 @@ public class TwoNumberSum {
         return new int[0];
     }
 
-    public void solutionTwo() {
+    public int[] solutionTwo(int [] array, int targetSum) {
+        // O(n) time | O(n) space
+        Set<Integer> nums = new HashSet<>();
+
+        for (int num: array) {
+            int potentialMatch = targetSum - num;
+            if (nums.contains(potentialMatch)) {
+                return new int[]{potentialMatch, num};
+            }
+
+            nums.add(num);
+        }
+
+        return new int[0];
     }
+
     public void solutionThree() {
     }
 
