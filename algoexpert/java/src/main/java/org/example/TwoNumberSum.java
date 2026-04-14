@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.ArrayList;
-
 public class TwoNumberSum {
     private int[] array;
     private int targetSum;
