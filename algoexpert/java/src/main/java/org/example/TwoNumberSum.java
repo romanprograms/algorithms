@@ -10,7 +10,7 @@ public class TwoNumberSum {
     }
 
     public int[] solutionOne(int [] array, int targetSum) {
-        // O(n^2) time |  O(n) space
+        // O(n^2) time |  O(1) space
         for (var i = 0; i < array.length - 1 ; i++) {
             var targetNum  = targetSum - array[i];
             for (var j = i + 1; j < array.length; j++) {
